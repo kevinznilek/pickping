@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organizer {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password_hash String
+  name          String
+  phone         String
+  venmo_username String?
+  created_at    DateTime @default(now())
+
+  games         Game[]
+
+  @@map("organizers")
+}
+
+model Player {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String   @unique
+  created_at DateTime @default(now())
+
+  game_rosters      GameRoster[]
+  game_confirmations GameConfirmation[]
+
+  @@map("players")
+}
+
+model Game {
+  id                    String   @id @default(cuid())
+  organizer_id          String
+  name                  String
+  location              String
+  day_of_week           Int      // 0 = Sunday, 1 = Monday, etc.
+  time                  String   // HH:MM format
+  total_spots           Int
+  cost_per_player       Decimal  @db.Decimal(10,2)
+  confirm_deadline_hours Int     @default(48)
+  created_at            DateTime @default(now())
+
+  organizer       Organizer      @relation(fields: [organizer_id], references: [id], onDelete: Cascade)
+  game_rosters    GameRoster[]
+  game_instances  GameInstance[]
+
+  @@map("games")
+}
+
+model GameRoster {
+  id         String   @id @default(cuid())
+  game_id    String
+  player_id  String
+  role       RosterRole
+  priority   Int?     // Only used for subs, lower number = higher priority
+  created_at DateTime @default(now())
+
+  game   Game   @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [player_id], references: [id], onDelete: Cascade)
+
+  @@unique([game_id, player_id])
+  @@map("game_rosters")
+}
+
+model GameInstance {
+  id         String            @id @default(cuid())
+  game_id    String
+  date       DateTime          @db.Date
+  status     GameInstanceStatus @default(UPCOMING)
+  created_at DateTime          @default(now())
+
+  game               Game                @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  game_confirmations GameConfirmation[]
+
+  @@unique([game_id, date])
+  @@map("game_instances")
+}
+
+model GameConfirmation {
+  id               String            @id @default(cuid())
+  game_instance_id String
+  player_id        String
+  status           ConfirmationStatus @default(PENDING)
+  responded_at     DateTime?
+  created_at       DateTime          @default(now())
+
+  game_instance GameInstance @relation(fields: [game_instance_id], references: [id], onDelete: Cascade)
+  player        Player       @relation(fields: [player_id], references: [id], onDelete: Cascade)
+
+  @@unique([game_instance_id, player_id])
+  @@map("game_confirmations")
+}
+
+enum RosterRole {
+  REGULAR
+  SUB
+}
+
+enum GameInstanceStatus {
+  UPCOMING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum ConfirmationStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  NO_RESPONSE
+}

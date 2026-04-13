@@ -1,4 +1,4 @@
-# Pickleup — MVP Build Brief
+# PickPing — MVP Build Brief
 
 ## What It Is
 A dead-simple pickup pickleball game roster manager with auto-fill subs and Venmo payment links.
