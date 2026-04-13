@@ -78,7 +78,7 @@ export default async function GamesPage() {
                       <p className="text-sm text-gray-600">{game.location}</p>
                     </div>
                     <div className="text-right text-sm text-gray-500">
-                      ${game.cost_per_player}/player
+                      ${game.cost_per_player.toString()}/player
                     </div>
                   </div>
 

@@ -54,8 +54,8 @@ export default function GameDetailPage({
     return <div className="p-6">Game not found</div>;
   }
 
-  const regulars = game.game_rosters.filter(r => r.role === 'REGULAR');
-  const subs = game.game_rosters.filter(r => r.role === 'SUB');
+  const regulars = game.game_rosters.filter((r: any) => r.role === 'REGULAR');
+  const subs = game.game_rosters.filter((r: any) => r.role === 'SUB');
 
   return (
     <div>
@@ -101,7 +101,7 @@ export default function GameDetailPage({
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Cost per Player:</span>
-                <span className="font-medium">${game.cost_per_player}</span>
+                <span className="font-medium">${game.cost_per_player.toString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Confirmation Deadline:</span>
@@ -138,7 +138,7 @@ export default function GameDetailPage({
                   <p className="text-sm text-gray-500">No regulars added yet</p>
                 ) : (
                   <div className="space-y-1">
-                    {regulars.slice(0, 5).map((roster) => (
+                    {regulars.slice(0, 5).map((roster: any) => (
                       <div key={roster.id} className="text-sm text-gray-700">
                         {roster.player.name}
                       </div>
@@ -159,7 +159,7 @@ export default function GameDetailPage({
                   <p className="text-sm text-gray-500">No subs added yet</p>
                 ) : (
                   <div className="space-y-1">
-                    {subs.slice(0, 5).map((roster, index) => (
+                    {subs.slice(0, 5).map((roster: any, index: number) => (
                       <div key={roster.id} className="text-sm text-gray-700 flex justify-between">
                         <span>{roster.player.name}</span>
                         <span className="text-xs text-gray-500">#{index + 1}</span>
@@ -226,10 +226,10 @@ export default function GameDetailPage({
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {game.game_instances.map((instance) => {
-                    const confirmedPlayers = instance.game_confirmations.filter(c => c.status === 'CONFIRMED');
-                    const pendingPlayers = instance.game_confirmations.filter(c => c.status === 'PENDING');
-                    const declinedPlayers = instance.game_confirmations.filter(c => c.status === 'DECLINED');
+                  {game.game_instances.map((instance: any) => {
+                    const confirmedPlayers = instance.game_confirmations.filter((c: any) => c.status === 'CONFIRMED');
+                    const pendingPlayers = instance.game_confirmations.filter((c: any) => c.status === 'PENDING');
+                    const declinedPlayers = instance.game_confirmations.filter((c: any) => c.status === 'DECLINED');
 
                     return (
                       <div key={instance.id} className="border rounded-lg p-4">
@@ -285,7 +285,7 @@ export default function GameDetailPage({
                               <p className="text-sm text-gray-500">None yet</p>
                             ) : (
                               <div className="space-y-1">
-                                {confirmedPlayers.map((confirmation) => (
+                                {confirmedPlayers.map((confirmation: any) => (
                                   <div key={confirmation.id} className="text-sm text-gray-700">
                                     {confirmation.player.name}
                                   </div>
@@ -302,7 +302,7 @@ export default function GameDetailPage({
                               <p className="text-sm text-gray-500">None</p>
                             ) : (
                               <div className="space-y-1">
-                                {pendingPlayers.map((confirmation) => (
+                                {pendingPlayers.map((confirmation: any) => (
                                   <div key={confirmation.id} className="text-sm text-gray-700">
                                     {confirmation.player.name}
                                   </div>
@@ -319,7 +319,7 @@ export default function GameDetailPage({
                               <p className="text-sm text-gray-500">None</p>
                             ) : (
                               <div className="space-y-1">
-                                {declinedPlayers.map((confirmation) => (
+                                {declinedPlayers.map((confirmation: any) => (
                                   <div key={confirmation.id} className="text-sm text-gray-700">
                                     {confirmation.player.name}
                                   </div>

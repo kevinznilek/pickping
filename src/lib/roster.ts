@@ -370,7 +370,7 @@ export async function lockRosterAndSendPaymentReminders(gameInstanceId: string) 
   const game = gameInstance.game;
   const confirmedPlayers = gameInstance.game_confirmations;
 
-  if (game.organizer.venmo_username && game.cost_per_player > 0) {
+  if (game.organizer.venmo_username && Number(game.cost_per_player) > 0) {
     // Send payment reminders with Venmo links
     const paymentNote = generatePaymentNote(game.name, gameInstance.date);
     const venmoLink = generateVenmoLink(
@@ -384,7 +384,7 @@ export async function lockRosterAndSendPaymentReminders(gameInstanceId: string) 
 
     await Promise.all(
       confirmedPlayers.map(confirmation => {
-        const message = `${tomorrow} ${formatTime(game.time)} at ${game.location} — you're confirmed! Pay $${game.cost_per_player} → ${venmoLink}`;
+        const message = `${tomorrow} ${formatTime(game.time)} at ${game.location} — you're confirmed! Pay $${Number(game.cost_per_player)} → ${venmoLink}`;
         return sendSMS(confirmation.player.phone, message);
       })
     );

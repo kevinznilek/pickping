@@ -140,8 +140,8 @@ export default function RosterManagePage() {
     );
   }
 
-  const regulars = game.game_rosters.filter(r => r.role === 'REGULAR');
-  const subs = game.game_rosters.filter(r => r.role === 'SUB').sort((a, b) => (a.priority || 0) - (b.priority || 0));
+  const regulars = game.game_rosters.filter((r: any) => r.role === 'REGULAR');
+  const subs = game.game_rosters.filter((r: any) => r.role === 'SUB').sort((a: any, b: any) => (a.priority || 0) - (b.priority || 0));
 
   return (
     <div>
@@ -188,7 +188,7 @@ export default function RosterManagePage() {
               </p>
             ) : (
               <div className="space-y-3">
-                {regulars.map((roster) => (
+                {regulars.map((roster: any) => (
                   <div key={roster.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
                       <div className="font-medium">{roster.player.name}</div>
@@ -220,11 +220,11 @@ export default function RosterManagePage() {
           <div className="p-6">
             {subs.length === 0 ? (
               <p className="text-gray-500 text-center py-8">
-                No subs added yet. Add backup players for when regulars can't make it.
+                No subs added yet. Add backup players for when regulars can&apos;t make it.
               </p>
             ) : (
               <div className="space-y-3">
-                {subs.map((roster, index) => (
+                {subs.map((roster: any, index: number) => (
                   <div key={roster.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">

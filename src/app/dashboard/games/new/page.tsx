@@ -218,9 +218,9 @@ export default function NewGamePage() {
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="font-medium text-gray-900 mb-2">What happens next?</h3>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li>• You'll add regular players who are in by default each week</li>
-              <li>• You'll add substitute players in priority order</li>
-              <li>• {formData.confirm_deadline_hours} hours before each game, regulars get "you in?" texts</li>
+              <li>• You&apos;ll add regular players who are in by default each week</li>
+              <li>• You&apos;ll add substitute players in priority order</li>
+              <li>• {formData.confirm_deadline_hours} hours before each game, regulars get &quot;you in?&quot; texts</li>
               <li>• If regulars drop out, subs get notified automatically</li>
             </ul>
           </div>

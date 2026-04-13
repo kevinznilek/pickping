@@ -64,7 +64,7 @@ export default async function HomePage() {
               <div className="text-3xl mb-4">📱</div>
               <h3 className="text-xl font-semibold mb-3">SMS-Only Players</h3>
               <p className="text-gray-600">
-                Players don't need accounts. They confirm via simple YES/NO text messages.
+                Players don&apos;t need accounts. They confirm via simple YES/NO text messages.
               </p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default async function HomePage() {
               <div>
                 <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center text-green-600 font-bold mb-4">2</div>
                 <h4 className="font-semibold mb-2">Auto Confirmations</h4>
-                <p className="text-gray-600 text-sm">2 days before, regulars get "you in?" texts. Subs fill open spots.</p>
+                <p className="text-gray-600 text-sm">2 days before, regulars get &quot;you in?&quot; texts. Subs fill open spots.</p>
               </div>
               <div>
                 <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center text-green-600 font-bold mb-4">3</div>
@@ -95,7 +95,7 @@ export default async function HomePage() {
           <div className="bg-blue-50 rounded-lg p-8">
             <h3 className="text-2xl font-semibold mb-4">Perfect for Game Organizers</h3>
             <p className="text-gray-700 max-w-2xl mx-auto">
-              You're the person who organizes the weekly pickup game at your local court.
+              You&apos;re the person who organizes the weekly pickup game at your local court.
               You know how much work goes into filling spots every week.
               PickPing automates the tedious parts so you can focus on playing.
             </p>
