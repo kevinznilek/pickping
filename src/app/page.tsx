@@ -12,7 +12,7 @@ export default function HomePage() {
               Dead-simple pickup pickleball game roster manager
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              A super simple way to manage your pickleball games. Automatically fill spots when regulars can't make it, send easy Venmo payment links and stop stressing about who is going to play.
+              A super simple way to manage your pickleball games. Automatically fill spots when regulars can&apos;t make it, send easy Venmo payment links and stop stressing about who is going to play.
             </p>
             <div className="space-x-4">
               <a
