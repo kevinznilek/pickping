@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createOrganizer } from '@/lib/auth';
-import { formatPhoneNumber } from '@/lib/twilio';
+import { formatPhoneNumber } from '@/lib/utils';
 import { z } from 'zod';
 
 const signUpSchema = z.object({
