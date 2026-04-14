@@ -1,8 +1,4 @@
-import Link from 'next/link';
-
 export default function HomePage() {
-  // Temporarily disable auth check to avoid database connection issues
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       <div className="container mx-auto px-4 py-16">
@@ -20,77 +16,48 @@ export default function HomePage() {
               Stop herding cats every week to fill your court.
             </p>
             <div className="space-x-4">
-              <Link
+              <a
                 href="/auth/signup"
-                className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-green-700 transition-colors inline-block"
               >
                 Get Started
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/auth/signin"
-                className="inline-block bg-white text-green-600 px-8 py-3 rounded-lg font-semibold border-2 border-green-600 hover:bg-green-50 transition-colors"
+                className="bg-white text-green-600 px-8 py-3 rounded-lg text-lg hover:bg-gray-50 transition-colors border border-green-600 inline-block"
               >
                 Sign In
-              </Link>
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-4">🔄</div>
-              <h3 className="text-xl font-semibold mb-3">Auto-Fill Subs</h3>
-              <p className="text-gray-600">
-                When regulars drop out, subs get notified automatically in priority order via SMS.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-4">💸</div>
-              <h3 className="text-xl font-semibold mb-3">Venmo Links</h3>
-              <p className="text-gray-600">
-                Players get pre-filled Venmo payment links for court fees. No manual collection needed.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-4">📱</div>
-              <h3 className="text-xl font-semibold mb-3">SMS-Only Players</h3>
-              <p className="text-gray-600">
-                Players don&apos;t need accounts. They confirm via simple YES/NO text messages.
-              </p>
+              </a>
             </div>
           </div>
 
           {/* How It Works */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-16">
-            <h3 className="text-2xl font-semibold mb-8">How It Works</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-left">
-              <div>
-                <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center text-green-600 font-bold mb-4">1</div>
-                <h4 className="font-semibold mb-2">Set Up Your Game</h4>
-                <p className="text-gray-600 text-sm">Create a recurring game with regulars and ranked subs.</p>
-              </div>
-              <div>
-                <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center text-green-600 font-bold mb-4">2</div>
-                <h4 className="font-semibold mb-2">Auto Confirmations</h4>
-                <p className="text-gray-600 text-sm">2 days before, regulars get &quot;you in?&quot; texts. Subs fill open spots.</p>
-              </div>
-              <div>
-                <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center text-green-600 font-bold mb-4">3</div>
-                <h4 className="font-semibold mb-2">Payment & Play</h4>
-                <p className="text-gray-600 text-sm">Confirmed players get Venmo links. Show up and play!</p>
-              </div>
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">📋</div>
+              <h3 className="text-xl font-semibold mb-2">Set Your Roster</h3>
+              <p className="text-gray-600">Add regulars and subs in priority order. Set when confirmations go out.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="text-xl font-semibold mb-2">Auto-Text Players</h3>
+              <p className="text-gray-600">Players confirm via simple YES/NO texts. Subs fill open spots automatically.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">💰</div>
+              <h3 className="text-xl font-semibold mb-2">Collect Payment</h3>
+              <p className="text-gray-600">Send Venmo links automatically. No more chasing people for court fees.</p>
             </div>
           </div>
 
-          {/* Target User */}
-          <div className="bg-blue-50 rounded-lg p-8">
-            <h3 className="text-2xl font-semibold mb-4">Perfect for Game Organizers</h3>
-            <p className="text-gray-700 max-w-2xl mx-auto">
-              You&apos;re the person who organizes the weekly pickup game at your local court.
-              You know how much work goes into filling spots every week.
-              PickPing automates the tedious parts so you can focus on playing.
+          {/* CTA */}
+          <div className="bg-white p-8 rounded-lg shadow">
+            <h2 className="text-3xl font-bold mb-4">Coming Soon!</h2>
+            <p className="text-gray-600 mb-6">
+              PickPing is being fine-tuned for the perfect pickup game experience.
+            </p>
+            <p className="text-sm text-gray-500">
+              Contact: <a href="mailto:hello@pickping.com" className="text-green-600">hello@pickping.com</a>
             </p>
           </div>
         </div>
