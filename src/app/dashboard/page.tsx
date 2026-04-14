@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 import Link from 'next/link';
 import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
+import { formatTime } from '@/lib/utils';
 
 async function getDashboardData(organizerId: string) {
   const [games, upcomingInstances, totalPlayers] = await Promise.all([
@@ -119,7 +120,7 @@ export default async function DashboardPage() {
                         <div>
                           <h3 className="font-semibold">{instance.game.name}</h3>
                           <p className="text-sm text-gray-600">
-                            {format(instance.date, 'EEEE, MMM d')} at {instance.game.time}
+                            {format(instance.date, 'EEEE, MMM d')} at {formatTime(instance.game.time)}
                           </p>
                           <p className="text-sm text-gray-600">{instance.game.location}</p>
                         </div>
@@ -179,7 +180,7 @@ export default async function DashboardPage() {
                           <h3 className="font-semibold">{game.name}</h3>
                           <p className="text-sm text-gray-600">{game.location}</p>
                           <p className="text-sm text-gray-600">
-                            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][game.day_of_week]}s at {game.time}
+                            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][game.day_of_week]}s at {formatTime(game.time)}
                           </p>
                         </div>
                         <div className="text-right text-sm">

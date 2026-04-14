@@ -74,12 +74,6 @@ export default function GameDetailPage({
           </div>
           <div className="flex space-x-3">
             <Link
-              href={`/dashboard/games/${game.id}/edit`}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Edit Game
-            </Link>
-            <Link
               href={`/dashboard/games/${game.id}/roster`}
               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
