@@ -370,6 +370,17 @@ export async function lockRosterAndSendPaymentReminders(gameInstanceId: string) 
   const game = gameInstance.game;
   const confirmedPlayers = gameInstance.game_confirmations;
 
+  // Initialize payment status for all confirmed players
+  const paymentStatus = Number(game.cost_per_player) > 0 ? 'UNPAID' : 'FREE';
+  await Promise.all(
+    confirmedPlayers.map(confirmation => 
+      db.gameConfirmation.update({
+        where: { id: confirmation.id },
+        data: { payment_status: paymentStatus as any },
+      })
+    )
+  );
+
   if (game.organizer.venmo_username && Number(game.cost_per_player) > 0) {
     // Send payment reminders with Venmo links
     const paymentNote = generatePaymentNote(game.name, gameInstance.date);

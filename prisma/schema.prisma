@@ -91,6 +91,10 @@ model GameConfirmation {
   player_id        String
   status           ConfirmationStatus @default(PENDING)
   responded_at     DateTime?
+  payment_status   PaymentStatus     @default(UNPAID)
+  paid_at          DateTime?
+  first_payment_reminder_sent_at  DateTime?
+  second_payment_reminder_sent_at DateTime?
   created_at       DateTime          @default(now())
 
   game_instance GameInstance @relation(fields: [game_instance_id], references: [id], onDelete: Cascade)
@@ -117,4 +121,10 @@ enum ConfirmationStatus {
   CONFIRMED
   DECLINED
   NO_RESPONSE
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FREE
 }

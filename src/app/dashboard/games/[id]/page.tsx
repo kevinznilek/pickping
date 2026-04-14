@@ -284,10 +284,51 @@ export default function GameDetailPage({
                             {confirmedPlayers.length === 0 ? (
                               <p className="text-sm text-gray-500">None yet</p>
                             ) : (
-                              <div className="space-y-1">
+                              <div className="space-y-2">
                                 {confirmedPlayers.map((confirmation: any) => (
-                                  <div key={confirmation.id} className="text-sm text-gray-700">
-                                    {confirmation.player.name}
+                                  <div key={confirmation.id} className="flex items-center justify-between text-sm">
+                                    <span className="text-gray-700">{confirmation.player.name}</span>
+                                    {game.cost_per_player > 0 && (
+                                      <div className="flex items-center space-x-1">
+                                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                          confirmation.payment_status === 'PAID' 
+                                            ? 'bg-green-100 text-green-800' 
+                                            : confirmation.payment_status === 'FREE'
+                                            ? 'bg-gray-100 text-gray-600'
+                                            : 'bg-red-100 text-red-800'
+                                        }`}>
+                                          {confirmation.payment_status === 'PAID' ? '✓ Paid' : 
+                                           confirmation.payment_status === 'FREE' ? 'Free' : 'Unpaid'}
+                                        </span>
+                                        {confirmation.payment_status === 'UNPAID' && (
+                                          <button
+                                            onClick={async () => {
+                                              try {
+                                                const response = await fetch(`/api/game-instances/${instance.id}/payment`, {
+                                                  method: 'POST',
+                                                  headers: { 'Content-Type': 'application/json' },
+                                                  body: JSON.stringify({ 
+                                                    playerId: confirmation.player.id,
+                                                    status: 'PAID'
+                                                  }),
+                                                });
+                                                if (response.ok) {
+                                                  window.location.reload();
+                                                } else {
+                                                  alert('Error updating payment status');
+                                                }
+                                              } catch (error) {
+                                                alert('Error: ' + error);
+                                              }
+                                            }}
+                                            className="text-xs text-blue-600 hover:text-blue-800"
+                                            title="Mark as paid"
+                                          >
+                                            Mark Paid
+                                          </button>
+                                        )}
+                                      </div>
+                                    )}
                                   </div>
                                 ))}
                               </div>
