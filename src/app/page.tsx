@@ -1,14 +1,7 @@
 import Link from 'next/link';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
-import { redirect } from 'next/navigation';
 
-export default async function HomePage() {
-  const session = await getServerSession(authOptions);
-
-  if (session) {
-    redirect('/dashboard');
-  }
+export default function HomePage() {
+  // Temporarily disable auth check to avoid database connection issues
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
