@@ -9,7 +9,7 @@ export default function HomePage() {
               <span className="text-black">Pick</span><span className="text-green-600">Ping</span>
             </h1>
             <h2 className="text-2xl text-gray-700 mb-8">
-              Dead-simple pickup pickleball game roster manager
+              Pickup pickleball made simple
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               A super simple way to manage your pickleball games. Automatically fill spots when regulars can&apos;t make it, send easy Venmo payment links and stop stressing about who is going to play.
