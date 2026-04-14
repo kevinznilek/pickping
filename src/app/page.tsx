@@ -15,18 +15,12 @@ export default function HomePage() {
               A super simple way to manage your pickleball games. Automatically fill spots when regulars can&apos;t make it, send easy Venmo payment links and stop stressing about who is going to play.
             </p>
             <div className="space-x-4">
-              <a
-                href="/auth/signup"
-                className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-green-700 transition-colors inline-block"
+              <button
+                disabled
+                className="bg-gray-400 text-white px-8 py-3 rounded-lg text-lg cursor-not-allowed inline-block"
               >
-                Get Started
-              </a>
-              <a
-                href="/auth/signin"
-                className="bg-white text-green-600 px-8 py-3 rounded-lg text-lg hover:bg-gray-50 transition-colors border border-green-600 inline-block"
-              >
-                Sign In
-              </a>
+                Coming Soon
+              </button>
             </div>
           </div>
 
