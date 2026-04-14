@@ -105,7 +105,13 @@ export default function GameDetailPage({
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Confirmation Deadline:</span>
-                <span className="font-medium">{game.confirm_deadline_hours}h before</span>
+                <span className="font-medium">{game.confirm_deadline_days} {game.confirm_deadline_days === 1 ? 'day' : 'days'} before</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Game Type:</span>
+                <span className={`font-medium ${game.is_recurring ? 'text-blue-600' : 'text-purple-600'}`}>
+                  {game.is_recurring ? 'Recurring Weekly' : 'One-Time Game'}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Regulars:</span>

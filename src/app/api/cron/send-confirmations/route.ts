@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     const results = [];
 
     for (const game of games) {
-      // Calculate the target date based on confirm_deadline_hours
-      const targetDate = addDays(new Date(), Math.ceil(game.confirm_deadline_hours / 24));
+      // Calculate the target date based on confirm_deadline_days
+      const targetDate = addDays(new Date(), game.confirm_deadline_days);
 
       // Find the next occurrence of this game's day of week
       let gameDate = new Date(targetDate);

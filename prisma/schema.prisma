@@ -45,7 +45,8 @@ model Game {
   time                  String   // HH:MM format
   total_spots           Int
   cost_per_player       Decimal  @db.Decimal(10,2)
-  confirm_deadline_hours Int     @default(48)
+  confirm_deadline_days  Int     @default(2)
+  is_recurring          Boolean  @default(true)
   created_at            DateTime @default(now())
 
   organizer       Organizer      @relation(fields: [organizer_id], references: [id], onDelete: Cascade)

@@ -11,7 +11,8 @@ const createGameSchema = z.object({
   time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format'),
   total_spots: z.number().min(2).max(20),
   cost_per_player: z.number().min(0),
-  confirm_deadline_hours: z.number().min(1).max(168), // 1 hour to 1 week
+  confirm_deadline_days: z.number().min(1).max(7), // 1 to 7 days
+  is_recurring: z.boolean(),
 });
 
 export async function POST(request: NextRequest) {

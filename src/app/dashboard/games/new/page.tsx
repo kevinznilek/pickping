@@ -12,7 +12,8 @@ export default function NewGamePage() {
     time: '',
     total_spots: '8',
     cost_per_player: '0',
-    confirm_deadline_hours: '48',
+    confirm_deadline_days: '2',
+    is_recurring: 'true',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -41,7 +42,8 @@ export default function NewGamePage() {
           day_of_week: parseInt(formData.day_of_week),
           total_spots: parseInt(formData.total_spots),
           cost_per_player: parseFloat(formData.cost_per_player),
-          confirm_deadline_hours: parseInt(formData.confirm_deadline_hours),
+          confirm_deadline_days: parseInt(formData.confirm_deadline_days),
+          is_recurring: formData.is_recurring === 'true',
         }),
       });
 
@@ -195,20 +197,61 @@ export default function NewGamePage() {
           </div>
 
           <div>
-            <label htmlFor="confirm_deadline_hours" className="block text-sm font-medium text-gray-700 mb-2">
-              Confirmation Deadline (hours before game)
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Game Type *
+            </label>
+            <div className="space-y-3">
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="recurring"
+                  name="is_recurring"
+                  value="true"
+                  checked={formData.is_recurring === 'true'}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
+                />
+                <label htmlFor="recurring" className="ml-3 block text-sm text-gray-900">
+                  <span className="font-medium">Recurring Weekly Game</span>
+                  <p className="text-gray-500">Repeats every {formData.day_of_week ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][parseInt(formData.day_of_week)] : 'selected day'}</p>
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="one-off"
+                  name="is_recurring"
+                  value="false"
+                  checked={formData.is_recurring === 'false'}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
+                />
+                <label htmlFor="one-off" className="ml-3 block text-sm text-gray-900">
+                  <span className="font-medium">One-Time Game</span>
+                  <p className="text-gray-500">Single game occurrence only</p>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="confirm_deadline_days" className="block text-sm font-medium text-gray-700 mb-2">
+              Confirmation Deadline (days before game)
             </label>
             <select
-              id="confirm_deadline_hours"
-              name="confirm_deadline_hours"
-              value={formData.confirm_deadline_hours}
+              id="confirm_deadline_days"
+              name="confirm_deadline_days"
+              value={formData.confirm_deadline_days}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
             >
-              <option value="12">12 hours before</option>
-              <option value="24">24 hours before</option>
-              <option value="48">48 hours before (recommended)</option>
-              <option value="72">72 hours before</option>
+              <option value="1">1 day before</option>
+              <option value="2">2 days before (recommended)</option>
+              <option value="3">3 days before</option>
+              <option value="4">4 days before</option>
+              <option value="5">5 days before</option>
+              <option value="6">6 days before</option>
+              <option value="7">7 days before</option>
             </select>
             <p className="text-sm text-gray-600 mt-1">
               How far in advance to send confirmation texts to regulars
@@ -218,10 +261,13 @@ export default function NewGamePage() {
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="font-medium text-gray-900 mb-2">What happens next?</h3>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li>• You&apos;ll add regular players who are in by default each week</li>
+              <li>• You&apos;ll add regular players who are in by default {formData.is_recurring === 'true' ? 'each week' : 'for this game'}</li>
               <li>• You&apos;ll add substitute players in priority order</li>
-              <li>• {formData.confirm_deadline_hours} hours before each game, regulars get &quot;you in?&quot; texts</li>
+              <li>• {formData.confirm_deadline_days} {formData.confirm_deadline_days === '1' ? 'day' : 'days'} before {formData.is_recurring === 'true' ? 'each game' : 'the game'}, regulars get &quot;you in?&quot; texts</li>
               <li>• If regulars drop out, subs get notified automatically</li>
+              {formData.is_recurring === 'true' && (
+                <li>• New game instances will be automatically scheduled each week</li>
+              )}
             </ul>
           </div>
 
