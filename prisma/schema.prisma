@@ -18,6 +18,12 @@ model Organizer {
   phone         String
   venmo_username String?
   created_at    DateTime @default(now())
+  
+  // Gmail OAuth integration
+  gmail_access_token     String?
+  gmail_refresh_token    String?
+  gmail_token_expires    DateTime?
+  gmail_connected_at     DateTime?
 
   games         Game[]
 

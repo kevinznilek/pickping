@@ -6,7 +6,7 @@ import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
 import { formatTime } from '@/lib/utils';
 
 async function getDashboardData(organizerId: string) {
-  const [games, upcomingInstances, totalPlayers] = await Promise.all([
+  const [games, upcomingInstances, totalPlayers, organizer] = await Promise.all([
     // Get all games for this organizer
     db.game.findMany({
       where: { organizer_id: organizerId },
@@ -46,9 +46,18 @@ async function getDashboardData(organizerId: string) {
         },
       },
     }),
+
+    // Get organizer with Gmail connection status
+    db.organizer.findUnique({
+      where: { id: organizerId },
+      select: {
+        gmail_connected_at: true,
+        gmail_access_token: true,
+      },
+    }),
   ]);
 
-  return { games, upcomingInstances, totalPlayers };
+  return { games, upcomingInstances, totalPlayers, organizer };
 }
 
 export default async function DashboardPage() {
@@ -58,7 +67,7 @@ export default async function DashboardPage() {
     return <div>Not authenticated</div>;
   }
 
-  const { games, upcomingInstances, totalPlayers } = await getDashboardData(session.user.id);
+  const { games, upcomingInstances, totalPlayers, organizer } = await getDashboardData(session.user.id);
 
   const totalGames = games.length;
   const totalRegulars = games.reduce((acc, game) =>
@@ -93,6 +102,76 @@ export default async function DashboardPage() {
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="text-2xl font-bold text-orange-600">{totalSubs}</div>
           <div className="text-sm text-gray-600">Subs</div>
+        </div>
+      </div>
+
+      {/* Gmail Integration */}
+      <div className="bg-white rounded-lg shadow mb-8">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold">Email Integration</h2>
+        </div>
+        <div className="p-6">
+          {organizer?.gmail_access_token ? (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <div>
+                  <p className="font-medium text-green-700">Gmail Connected</p>
+                  <p className="text-sm text-gray-600">
+                    Connected {organizer.gmail_connected_at ? 
+                      format(new Date(organizer.gmail_connected_at), 'MMM d, yyyy') : 'recently'}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    ✅ Automatic Venmo payment detection<br/>
+                    ✅ YourCourts booking auto-import
+                  </p>
+                </div>
+              </div>
+              <button
+                className="text-sm text-gray-500 hover:text-gray-700"
+                onClick={() => {
+                  // TODO: Add disconnect functionality
+                  alert('Disconnect functionality coming soon');
+                }}
+              >
+                Disconnect
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium text-gray-900">Connect Gmail for Automation</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Automatically detect Venmo payments and import YourCourts bookings
+                </p>
+                <div className="text-sm text-gray-500 mt-2">
+                  🔒 <strong>Privacy first:</strong> Only reads Venmo payment emails and court booking confirmations
+                </div>
+              </div>
+              <button
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/auth/gmail/connect');
+                    const data = await response.json();
+                    if (data.authUrl) {
+                      window.location.href = data.authUrl;
+                    } else {
+                      alert('Failed to initiate Gmail connection');
+                    }
+                  } catch (error) {
+                    console.error('Gmail connect error:', error);
+                    alert('Failed to connect Gmail');
+                  }
+                }}
+              >
+                <span>Connect Gmail</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
