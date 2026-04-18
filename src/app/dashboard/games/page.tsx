@@ -37,7 +37,7 @@ export default async function GamesPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Games</h1>
-          <p className="text-gray-600">Manage your recurring pickup games</p>
+          <p className="text-gray-600">Manage your games</p>
         </div>
         <Link
           href="/dashboard/games/new"
@@ -53,7 +53,7 @@ export default async function GamesPage() {
           <div className="text-6xl mb-4 font-bold text-gray-400">P</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No games yet</h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Create your first pickup game to start managing players and automating confirmations.
+            Create your first game to start managing players and automating confirmations.
           </p>
           <Link
             href="/dashboard/games/new"

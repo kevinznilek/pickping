@@ -34,11 +34,15 @@ export default function RosterManagePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showAddPlayer, setShowAddPlayer] = useState(false);
+  const [showImportPlayers, setShowImportPlayers] = useState(false);
   const [newPlayerForm, setNewPlayerForm] = useState({
     name: '',
     phone: '',
     role: 'REGULAR' as 'REGULAR' | 'SUB',
   });
+  const [importText, setImportText] = useState('');
+  const [parsedPlayers, setParsedPlayers] = useState<Array<{name: string; phone: string; role: 'REGULAR' | 'SUB'}>>([]);
+  const [showImportReview, setShowImportReview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -56,6 +60,49 @@ export default function RosterManagePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const parseContactText = (text: string) => {
+    const lines = text.split('\n').filter(line => line.trim());
+    const contacts: Array<{name: string; phone: string; role: 'REGULAR' | 'SUB'}> = [];
+    
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) continue;
+      
+      // Match various formats:
+      // "John Smith 555-123-4567"
+      // "Smith, John (555) 123-4567"  
+      // "John 555.123.4567"
+      // "555-123-4567 John Smith"
+      
+      const phoneRegex = /(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})/;
+      const phoneMatch = trimmedLine.match(phoneRegex);
+      
+      if (phoneMatch) {
+        const phone = phoneMatch[1];
+        let name = trimmedLine.replace(phoneRegex, '').trim();
+        
+        // Clean up common separators
+        name = name.replace(/[,\-\s]+$|^[,\-\s]+/, '').trim();
+        
+        if (name) {
+          // Handle "Last, First" format
+          if (name.includes(',')) {
+            const [last, first] = name.split(',').map(s => s.trim());
+            name = `${first} ${last}`.trim();
+          }
+          
+          contacts.push({ 
+            name, 
+            phone: phone.replace(/\D/g, '').replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3'),
+            role: 'REGULAR' 
+          });
+        }
+      }
+    }
+    
+    return contacts;
   };
 
   const handleAddPlayer = async (e: React.FormEvent) => {
@@ -78,6 +125,45 @@ export default function RosterManagePage() {
       // Reset form and refresh
       setNewPlayerForm({ name: '', phone: '', role: 'REGULAR' });
       setShowAddPlayer(false);
+      await fetchGame();
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleParseImport = () => {
+    const parsed = parseContactText(importText);
+    if (parsed.length === 0) {
+      setError('No contacts found. Make sure names and phone numbers are on separate lines.');
+      return;
+    }
+    setParsedPlayers(parsed);
+    setShowImportReview(true);
+  };
+
+  const handleBulkImport = async () => {
+    setSubmitting(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`/api/games/${gameId}/roster/bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ players: parsedPlayers }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to import players');
+      }
+
+      // Reset and refresh
+      setImportText('');
+      setParsedPlayers([]);
+      setShowImportPlayers(false);
+      setShowImportReview(false);
       await fetchGame();
     } catch (error: any) {
       setError(error.message);
@@ -155,12 +241,20 @@ export default function RosterManagePage() {
             <h1 className="text-2xl font-bold text-gray-900">Manage Roster</h1>
             <p className="text-gray-600">{game.name} at {game.location}</p>
           </div>
-          <button
-            onClick={() => setShowAddPlayer(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Add Player
-          </button>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => setShowImportPlayers(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Import Players
+            </button>
+            <button
+              onClick={() => setShowAddPlayer(true)}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Add Player
+            </button>
+          </div>
         </div>
       </div>
 
@@ -355,6 +449,163 @@ export default function RosterManagePage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Import Players Modal */}
+      {showImportPlayers && !showImportReview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Import Players</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Paste your contact list below. We'll automatically detect names and phone numbers from common formats like:
+              </p>
+              <div className="text-sm text-gray-500 mb-6 space-y-1">
+                <div>• John Smith 555-123-4567</div>
+                <div>• Smith, John (555) 123-4567</div>
+                <div>• Mike 555.123.4567</div>
+                <div>• (555) 123-4567 Sarah Johnson</div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Contact List *
+                  </label>
+                  <textarea
+                    value={importText}
+                    onChange={(e) => setImportText(e.target.value)}
+                    rows={8}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    placeholder="John Smith 555-123-4567&#10;Sarah Johnson (555) 987-6543&#10;Mike Wilson 555.555.5555&#10;..."
+                  />
+                </div>
+              </div>
+
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={handleParseImport}
+                  disabled={!importText.trim()}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Parse Contacts
+                </button>
+                <button
+                  onClick={() => {
+                    setShowImportPlayers(false);
+                    setImportText('');
+                    setError('');
+                  }}
+                  className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import Review Modal */}
+      {showImportReview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4 max-h-[80vh] flex flex-col">
+            <div className="p-6 border-b border-gray-200">
+              <h3 className="text-lg font-semibold">Review Imported Contacts</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Found {parsedPlayers.length} contacts. Review and edit before importing.
+              </p>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-3">
+                {parsedPlayers.map((player, index) => (
+                  <div key={index} className="grid grid-cols-12 gap-3 p-3 border rounded-lg">
+                    <div className="col-span-5">
+                      <input
+                        type="text"
+                        value={player.name}
+                        onChange={(e) => {
+                          const updated = [...parsedPlayers];
+                          updated[index].name = e.target.value;
+                          setParsedPlayers(updated);
+                        }}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Name"
+                      />
+                    </div>
+                    <div className="col-span-4">
+                      <input
+                        type="tel"
+                        value={player.phone}
+                        onChange={(e) => {
+                          const updated = [...parsedPlayers];
+                          updated[index].phone = e.target.value;
+                          setParsedPlayers(updated);
+                        }}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Phone"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <select
+                        value={player.role}
+                        onChange={(e) => {
+                          const updated = [...parsedPlayers];
+                          updated[index].role = e.target.value as 'REGULAR' | 'SUB';
+                          setParsedPlayers(updated);
+                        }}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                      >
+                        <option value="REGULAR">Regular</option>
+                        <option value="SUB">Sub</option>
+                      </select>
+                    </div>
+                    <div className="col-span-1">
+                      <button
+                        onClick={() => {
+                          const updated = parsedPlayers.filter((_, i) => i !== index);
+                          setParsedPlayers(updated);
+                        }}
+                        className="text-red-600 hover:text-red-700 text-sm w-full text-center"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex space-x-3">
+              <button
+                onClick={handleBulkImport}
+                disabled={submitting || parsedPlayers.length === 0}
+                className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? 'Importing...' : `Import ${parsedPlayers.length} Players`}
+              </button>
+              <button
+                onClick={() => setShowImportReview(false)}
+                className="px-6 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200"
+              >
+                Back to Edit
+              </button>
+              <button
+                onClick={() => {
+                  setShowImportPlayers(false);
+                  setShowImportReview(false);
+                  setImportText('');
+                  setParsedPlayers([]);
+                  setError('');
+                }}
+                className="px-6 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

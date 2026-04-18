@@ -21,9 +21,25 @@ export async function GET() {
       return NextResponse.json({ error: 'Organizer not found' }, { status: 404 });
     }
     
+    // Validate Google OAuth credentials are configured
+    if (!process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID === 'your-google-client-id-here') {
+      console.error('GOOGLE_CLIENT_ID is not configured');
+      return NextResponse.json(
+        { error: 'Gmail integration is not configured. Set GOOGLE_CLIENT_ID in your environment.' },
+        { status: 503 }
+      );
+    }
+    if (!process.env.GOOGLE_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET === 'your-google-client-secret-here') {
+      console.error('GOOGLE_CLIENT_SECRET is not configured');
+      return NextResponse.json(
+        { error: 'Gmail integration is not configured. Set GOOGLE_CLIENT_SECRET in your environment.' },
+        { status: 503 }
+      );
+    }
+
     // Generate OAuth consent URL
     const authUrl = getAuthUrl(organizer.id);
-    
+
     return NextResponse.json({ authUrl });
   } catch (error) {
     console.error('Gmail connect error:', error);

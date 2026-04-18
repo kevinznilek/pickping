@@ -41,12 +41,17 @@ export function GmailConnect({ isConnected, connectedAt }: GmailConnectProps) {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <p className="font-medium text-gray-900">Connect Gmail for Automation</p>
+        <p className="font-medium text-gray-900">Connect Gmail Account</p>
         <p className="text-sm text-gray-600 mt-1">
-          Automatically detect Venmo payments and import YourCourts bookings
+          Connecting your Gmail enables powerful automation features:
         </p>
-        <div className="text-sm text-gray-500 mt-2">
-          🔒 <strong>Privacy first:</strong> Only reads Venmo payment emails and court booking confirmations
+        <div className="text-sm text-gray-600 mt-2 space-y-1">
+          <p>• <strong>Automatic Venmo payment tracking</strong> - Scan for payment notifications and update player status</p>
+          <p>• <strong>YourCourts booking import</strong> - Import existing reservations and player lists</p>
+          <p>• <strong>Payment reminders</strong> - Send automatic payment requests for upcoming games</p>
+        </div>
+        <div className="text-sm text-gray-500 mt-3">
+          🔒 <strong>Privacy first:</strong> We only access emails from Venmo and YourCourts. Your other emails remain private.
         </div>
       </div>
       <button

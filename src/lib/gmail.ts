@@ -6,10 +6,15 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 
 // Create OAuth2 client
 export function createOAuth2Client() {
+  // Fall back to constructing the redirect URI from NEXTAUTH_URL if GOOGLE_REDIRECT_URI isn't set
+  const redirectUri =
+    process.env.GOOGLE_REDIRECT_URI ||
+    `${process.env.NEXTAUTH_URL}/api/auth/gmail/callback`;
+
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    redirectUri
   );
 }
 
