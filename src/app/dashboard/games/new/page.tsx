@@ -79,7 +79,7 @@ export default function NewGamePage() {
           ← Back to Games
         </Link>
         <h1 className="text-2xl font-bold text-gray-900 mt-2">Create New Game</h1>
-        <p className="text-gray-600">Set up a recurring pickup game with auto-confirmations</p>
+        <p className="text-gray-600">Set up a recurring game with auto-confirmations</p>
       </div>
 
       {/* Form */}

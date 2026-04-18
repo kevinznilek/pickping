@@ -87,7 +87,7 @@ export default function HomePage() {
           <div className="bg-blue-50 rounded-lg p-8">
             <h3 className="text-2xl font-semibold mb-4">Perfect for Game Organizers</h3>
             <p className="text-gray-700 max-w-2xl mx-auto">
-              You&apos;re the person who organizes the weekly pickup game at your local court.
+              You&apos;re the person who organizes the weekly pickleball game at your local court.
               You know how much work goes into filling spots every week.
               PickPing automates the tedious parts so you can focus on playing.
             </p>

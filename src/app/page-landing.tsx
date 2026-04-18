@@ -9,7 +9,7 @@ export default function HomePage() {
               <span className="text-black">Pick</span><span className="text-green-600">Ping</span>
             </h1>
             <h2 className="text-2xl text-gray-700 mb-8">
-              Pickup pickleball made simple
+              Pickleball made simple
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               A super simple way to manage your pickleball games. Automatically fill spots when regulars can&apos;t make it, send easy Venmo payment links and stop stressing about who is going to play.
@@ -47,7 +47,7 @@ export default function HomePage() {
           <div className="bg-white p-8 rounded-lg shadow">
             <h2 className="text-3xl font-bold mb-4">Coming Soon!</h2>
             <p className="text-gray-600 mb-6">
-              PickPing is being fine-tuned for the perfect pickup game experience.
+              PickPing is being fine-tuned for the perfect game experience.
             </p>
             <p className="text-sm text-gray-500">
               Contact: <a href="mailto:hello@pickping.com" className="text-green-600">hello@pickping.com</a>

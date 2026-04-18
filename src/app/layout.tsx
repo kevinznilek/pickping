@@ -6,8 +6,8 @@ import { AuthProvider } from '@/components/auth-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PickPing - Pickup Pickleball Game Manager',
-  description: 'Dead-simple pickup pickleball game roster manager with auto-fill subs and Venmo payment links.',
+  title: 'PickPing - Pickleball Game Manager',
+  description: 'Dead-simple pickleball game roster manager with auto-fill subs and Venmo payment links.',
 };
 
 export default function RootLayout({
