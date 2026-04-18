@@ -460,7 +460,7 @@ export default function RosterManagePage() {
             <div className="p-6">
               <h3 className="text-lg font-semibold mb-4">Import Players</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Paste your contact list below. We'll automatically detect names and phone numbers from common formats like:
+                Paste your contact list below. We&apos;ll automatically detect names and phone numbers from common formats like:
               </p>
               <div className="text-sm text-gray-500 mb-6 space-y-1">
                 <div>• John Smith 555-123-4567</div>
